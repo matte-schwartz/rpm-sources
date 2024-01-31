@@ -1,0 +1,27 @@
+From 74608271c2ec4fc242875ef0b9cd39ce0e5964fc Mon Sep 17 00:00:00 2001
+From: Joshua Ashton <joshua@froggi.es>
+Date: Tue, 16 Jan 2024 00:49:27 +0000
+Subject: [PATCH 1/6] amdgpu: Forward -ENODATA
+
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_job.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+index 57f8f8b3cd8a..5763b51d8019 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+@@ -256,9 +256,8 @@ amdgpu_job_prepare_job(struct drm_sched_job *sched_job,
+ 	struct dma_fence *fence = NULL;
+ 	int r;
+ 
+-	/* Ignore soft recovered fences here */
+ 	r = drm_sched_entity_error(s_entity);
+-	if (r && r != -ENODATA)
++	if (r)
+ 		goto error;
+ 
+ 	if (job->gang_submit)
+-- 
+2.43.0
+

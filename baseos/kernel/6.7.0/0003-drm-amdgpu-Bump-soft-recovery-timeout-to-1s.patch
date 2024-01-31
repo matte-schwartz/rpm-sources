@@ -1,0 +1,25 @@
+From 87512adb7df52a3387cdb075dc29cfa60df484d7 Mon Sep 17 00:00:00 2001
+From: Matthew Schwartz <njtransit215@gmail.com>
+Date: Wed, 31 Jan 2024 14:46:43 -0800
+Subject: [PATCH] Bump soft recovery timeout to 1s in amdgpu_ring.c
+
+---
+ linux-6.7/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linux-6.7/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c b/linux-6.7/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c
+index 6a80d3ec8..6336f8412 100644
+--- a/linux-6.7/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c
++++ b/linux-6.7/drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c
+@@ -439,7 +439,7 @@ bool amdgpu_ring_soft_recovery(struct amdgpu_ring *ring, unsigned int vmid,
+ 	if (unlikely(ring->adev->debug_disable_soft_recovery))
+ 		return false;
+ 
+-	deadline = ktime_add_us(ktime_get(), 10000);
++	deadline = ktime_add_us(ktime_get(), 1000);
+ 
+ 	if (amdgpu_sriov_vf(ring->adev) || !ring->funcs->soft_recovery || !fence)
+ 		return false;
+-- 
+2.43.0
+

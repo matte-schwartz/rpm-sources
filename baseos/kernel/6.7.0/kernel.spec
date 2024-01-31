@@ -164,13 +164,13 @@ Summary: The Linux kernel
 %define specrpmversion 6.7.0
 %define specversion 6.7.0
 %define patchversion 6.7
-%define pkgrelease 204
+%define pkgrelease 205
 %define kversion 6
 %define tarfile_release 6.7
 # This is needed to do merge window version magic
 %define patchlevel 7
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 204%{?buildid}%{?dist}
+%define specrelease 205%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 6.7.0
 
@@ -1040,7 +1040,10 @@ Patch501: 0001-Revert-PCI-Add-a-REBAR-size-quirk-for-Sapphire-RX-56.patch
 Patch502: 0001-acpi-proc-idle-skip-dummy-wait.patch
 Patch503: 0001-drm-i915-quirks-disable-async-flipping-on-specific-d.patch
 Patch504: 0002-drm-i915-add-kernel-parameter-to-disable-async-page-.patch
-
+Patch505: 0001-amdgpu-Forward-ENODATA.patch
+Patch506: 0003-drm-amdgpu-Bump-soft-recovery-timeout-to-1s.patch
+Patch507: 0004-drm-amdgpu-Reset-IH-OVERFLOW_CLEAR-bit.patch
+Patch508: 0005-drm-amdgpu-Process-fences-on-IH-overflow.patch
 
 # Allow to set custom USB pollrate for specific devices like so:
 # usbcore.interrupt_interval_override=045e:00db:16,1bcf:0005:1
@@ -1885,6 +1888,10 @@ ApplyOptionalPatch 0001-Revert-PCI-Add-a-REBAR-size-quirk-for-Sapphire-RX-56.pat
 ApplyOptionalPatch 0001-acpi-proc-idle-skip-dummy-wait.patch
 ApplyOptionalPatch 0001-drm-i915-quirks-disable-async-flipping-on-specific-d.patch
 ApplyOptionalPatch 0002-drm-i915-add-kernel-parameter-to-disable-async-page-.patch
+ApplyOptionalPatch 0001-amdgpu-Forward-ENODATA.patch
+ApplyOptionalPatch 0003-drm-amdgpu-Bump-soft-recovery-timeout-to-1s.patch
+ApplyOptionalPatch 0004-drm-amdgpu-Reset-IH-OVERFLOW_CLEAR-bit.patch
+ApplyOptionalPatch 0005-drm-amdgpu-Process-fences-on-IH-overflow.patch
 
 # Allow to set custom USB pollrate for specific devices like so:
 # usbcore.interrupt_interval_override=045e:00db:16,1bcf:0005:1
