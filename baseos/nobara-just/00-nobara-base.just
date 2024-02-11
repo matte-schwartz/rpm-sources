@@ -16,17 +16,10 @@ logs-last-boot:
     sudo journalctl -b -1
 
 # Regenerate GRUB config, useful in dual-boot scenarios where a second operating system isn't listed
-regenerate-grub:
+update-grub:
     #!/usr/bin/bash
     if [ -d /sys/firmware/efi ]; then
       sudo grub2-mkconfig -o /etc/grub2-efi.cfg
     else
       sudo grub2-mkconfig -o /etc/grub2.cfg
     fi
-
-
-# Removes homebrew from system
-remove-brew:
-    echo "Removing homebrew ..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
-

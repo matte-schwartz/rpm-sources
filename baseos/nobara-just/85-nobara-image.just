@@ -4,7 +4,6 @@ get-decky:
     #!/usr/bin/bash
     export HOME=$(getent passwd ${SUDO_USER:-$USER} | cut -d: -f6)
     curl -L https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/install_release.sh | sh
-    sudo chcon -R -t bin_t $HOME/homebrew/services/PluginLoader
 
 # Install SimpleDeckyTDP, a simple TDP plugin for alternative PC handhelds
 get-simpledeckytdp:
@@ -17,7 +16,7 @@ get-simpledeckytdp:
       sudo sed -i 's/ENABLE_HARDWARE_CONTROL_ON_NON_DECK_HARDWARE=0/ENABLE_HARDWARE_CONTROL_ON_NON_DECK_HARDWARE=1/g' /etc/default/steam-hardware-control
       echo 'Installed. Please reboot to apply needed changes.'
     else
-      echo 'Please install Decky Loader by running ujust get-decky first.'
+      echo 'Please install Decky Loader by running nojust get-decky first.'
     fi
 
 # Install HHD Decky Plugin for controlling input on the Lenovo Legion Go and ASUS Ally
@@ -30,7 +29,7 @@ get-hhd-decky:
       rm /tmp/hhd-decky.tar.gz
       echo 'Installed.'
     else
-      echo 'Please install Decky Loader by running ujust get-decky first.'
+      echo 'Please install Decky Loader by running nojust get-decky first.'
     fi
 
 # Install ROG Ally Theme for CSS Loader (https://github.com/semakusut/SBP-ROG-Ally)
@@ -98,17 +97,3 @@ disable-sdgyrodsu:
     #!/usr/bin/bash
     sudo systemctl mask --user sdgyrodsu.service
 
-# Re-enable input remapper feature on non-desktop images
-restore-input-remapper:
-    systemctl enable --now input-remapper.service && \
-    cp /usr/share/applications/input-remapper-gtk.desktop ~/.local/share/applications/input-remapper-gtk.desktop && \
-    sed -i '/NoDisplay=true/d' ~/.local/share/applications/input-remapper-gtk.desktop
-
-_toggle_wayland:
-    #!/usr/bin/bash
-    source /etc/default/desktop-wayland
-    if ${DESKTOP_WAYLAND}; then
-      sudo sed -i 's/true/false/g' /etc/default/desktop-wayland
-    else
-      sudo sed -i 's/false/true/g' /etc/default/desktop-wayland
-    fi
