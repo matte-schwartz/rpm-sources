@@ -45,10 +45,10 @@ Use mock to build the rpm. Mock config files are in the mock folder, located in 
 >To make this easier, you can also copy the .cfg files into /etc/mock and use the command like this:
 >
 >64 bit package:
->`mock -r nobara-39-x86_64.cfg --rebuild --enable-network *.src.rpm`
+>`mock -r nobara-39-x86_64 --rebuild --enable-network *.src.rpm`
 >
 >32 bit package:
->`mock -r nobara-39-i386.cfg --rebuild --enable-network *.src.rpm`
+>`mock -r nobara-39-i386 --rebuild --enable-network *.src.rpm`
 
 Move the results folder to the current directory:
 
