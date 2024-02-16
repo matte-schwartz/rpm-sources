@@ -4,7 +4,7 @@ Package building basics:
 
 First, we need to create a .src.rpm from the .spec sheet and patches/files it uses. This will require some tools:
 
-`sudo dnf install spectool fedpkg`
+`sudo dnf install fedpkg`
 
 Next, open a terminal and navigate to the folder containing the spec sheet of the package you want to build:
 
@@ -34,13 +34,21 @@ Add your user to the mock group:
 `sudo usermod -aG mock $USER`
 `su - $USER`
 
-Use mock to build the rpm. Mock config files are in the mock folder. Most packages only need a 64 bit build:
+Use mock to build the rpm. Mock config files are in the mock folder, located in /etc. Most packages only need a 64 bit build:
 
 64 bit package:
 `mock -r /path/to/mock/folder/nobara-39-x86_64.cfg --rebuild --enable-network *.src.rpm`
 
 32 bit package:
 `mock -r /path/to/mock/folder/nobara-39-i386.cfg --rebuild --enable-network *.src.rpm`
+
+>To make this easier, you can also copy the .cfg files into /etc/mock and use the command like this:
+>
+>64 bit package:
+>`mock -r nobara-39-x86_64.cfg --rebuild --enable-network *.src.rpm`
+>
+>32 bit package:
+>`mock -r nobara-39-i386.cfg --rebuild --enable-network *.src.rpm`
 
 Move the results folder to the current directory:
 
@@ -79,7 +87,7 @@ navigate to the folder containing your `.src.rpm` file you generated with `fedpk
 
 Syntax:
 
-copr-cli build <copr-repo-name> --nowait --chroot=<chroot-you-want> --timeout=36000 *.src.rpm
+`copr-cli build <copr-repo-name> --nowait --chroot=<chroot-you-want> --timeout=36000 *.src.rpm`
 
 You can check the status of the build at:
 https://copr.fedorainfracloud.org/coprs/YOUR-USER-NAME/YOUR-REPO-NAME/builds/
@@ -87,13 +95,13 @@ https://copr.fedorainfracloud.org/coprs/YOUR-USER-NAME/YOUR-REPO-NAME/builds/
 Examples:
 
 All chroots:
-copr-cli build nobara --nowait --timeout=36000 *.src.rpm
+`copr-cli build nobara --nowait --timeout=36000 *.src.rpm`
 
 64 bit:
-copr-cli build nobara --nowait --chroot=fedora-39-x86_64 --timeout=36000 *.src.rpm
+`copr-cli build nobara --nowait --chroot=fedora-39-x86_64 --timeout=36000 *.src.rpm`
 
 32 bit:
-copr-cli build nobara --nowait --chroot=fedora-39-i386 --timeout=36000 *.src.rpm
+`copr-cli build nobara --nowait --chroot=fedora-39-i386 --timeout=36000 *.src.rpm`
 
 Once the build is finished you can install it from copr like any other copr repo:
 
