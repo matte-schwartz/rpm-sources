@@ -1,13 +1,14 @@
 Name:           hhd
-Version:        1.3.6
-Release:        2%{?dist}
+Version:        2.1.2
+Release:        1%{?dist}
 Summary:        Handheld Daemon, a tool for configuring handheld devices.
 
-License:        MIT
+License:        GPL-3.0-or-later AND MIT
 URL:            https://github.com/hhd-dev/hhd
 Source:        	https://pypi.python.org/packages/source/h/%{name}/%{name}-%{version}.tar.gz
 Patch0:         0001-add-files-for-autostart.patch
-Patch1:         0001-fixup-steam-powerbutton-long-press-behavior.patch
+# Obsoleted by https://github.com/hhd-dev/hhd/commit/fa85533
+#Patch1:         0001-fixup-steam-powerbutton-long-press-behavior.patch
 
 BuildArch:      noarch
 BuildRequires:  systemd-rpm-macros
@@ -69,5 +70,8 @@ udevadm trigger
 %{_datadir}/polkit-1/actions/org.hhd.start.policy
 
 %changelog
+* Sat Mar 16 2024 Matthew Schwartz <njtransit215@gmail.com> 2.1.2-1
+- improves Legion Go gyro accuracy and mapping, introduces per-controller gyro for the Legion Go
+
 * Sun Feb 4 2024 Matthew Schwartz <njtransit215@gmail.com> 1.3.6-1
 - upgrades to new v1.3.6 release. support added for select devices from Ayaneo, AOKZOE, and GPD along with reduced system performance overhead.

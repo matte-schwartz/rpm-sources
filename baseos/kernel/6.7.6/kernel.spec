@@ -1048,6 +1048,12 @@ Patch405: v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
 Patch406: v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
 Patch407: rog-ally-gyro-fix.patch
 
+# Legion Go shit
+Patch410: 0001-amd-sfh-bump-sensitivity.patch
+
+# Chinese handheld shit
+Patch420: 0001-iio-imu-Add-driver-for-Bosch-BMI260-IMU.patch
+
 # temporary patches
 Patch501: 0001-Revert-PCI-Add-a-REBAR-size-quirk-for-Sapphire-RX-56.patch
 Patch502: 0001-acpi-proc-idle-skip-dummy-wait.patch
@@ -1891,6 +1897,12 @@ ApplyOptionalPatch v14.8-0002-HID-asus-make-asus_kbd_init-generic-remove-rog.pat
 ApplyOptionalPatch v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
 ApplyOptionalPatch v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
 ApplyOptionalPatch rog-ally-gyro-fix.patch
+
+# Legion Go shit
+ApplyOptionalPatch 0001-amd-sfh-bump-sensitivity.patch
+
+# Chinese handheld shit
+ApplyOptionalPatch 0001-iio-imu-Add-driver-for-Bosch-BMI260-IMU.patch
 
 # temporary patches
 ApplyOptionalPatch 0001-Revert-PCI-Add-a-REBAR-size-quirk-for-Sapphire-RX-56.patch
