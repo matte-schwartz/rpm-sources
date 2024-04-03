@@ -1,13 +1,12 @@
 Name:           hhd
-Version:        1.3.6
-Release:        2%{?dist}
+Version:        2.4.2
+Release:        1%{?dist}
 Summary:        Handheld Daemon, a tool for configuring handheld devices.
 
 License:        MIT
 URL:            https://github.com/hhd-dev/hhd
 Source:        	https://pypi.python.org/packages/source/h/%{name}/%{name}-%{version}.tar.gz
 Patch0:         0001-add-files-for-autostart.patch
-Patch1:         0001-fixup-steam-powerbutton-long-press-behavior.patch
 
 BuildArch:      noarch
 BuildRequires:  systemd-rpm-macros
@@ -26,7 +25,6 @@ Conflicts:      HandyGCCS
 Conflicts:      lgcd
 Conflicts:      rogue-enemy
 Provides:	steam-powerbuttond
-Obsoletes:	steam-powerbuttond
 
 %description
 Handheld Daemon is a project that aims to provide utilities for managing handheld devices. With features ranging from TDP controls, to controller remappings, and gamescope session management. This will be done through a plugin system and an HTTP(/d-bus?) daemon, which will expose the settings of the plugins in a UI agnostic way.
