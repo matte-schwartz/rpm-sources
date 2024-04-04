@@ -2,7 +2,7 @@
 
 Name:           hhd-ui
 Version:        2.2.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Configurator interface for Handheld Daemon.
 License:        GPL-3.0-or-later
 URL:            https://github.com/hhd-dev/hhd-ui
@@ -14,9 +14,9 @@ BuildArch:      x86_64
 BuildRequires:  npm
 BuildRequires:  fuse-devel
 BuildRequires:  git
+BuildRequires:  desktop-file-utils
 BuildRequires:  systemd-rpm-macros
 
-Requires: desktop-file-utils
 Requires: hhd
 Requires: fuse
 
@@ -46,14 +46,14 @@ install -Dm644 %{name}-%{version}/LICENSE %{buildroot}%{_licensedir}/%{name}/LIC
 install -Dm644 %{_sourcedir}/hhd-ui.desktop %{buildroot}/usr/share/applications/hhd-ui.desktop
 
 %post
-desktop-file-validate %{buildroot}/usr/share/applications/hhd-ui.desktop &> /dev/null || :
-update-desktop-database &> /dev/null || :
 
 %postun
-desktop-file-validate %{buildroot}/usr/share/applications/hhd-ui.desktop &> /dev/null || :
-update-desktop-database &> /dev/null || :
 
 %files
 %license %{_licensedir}/%{name}/LICENSE
 %{_bindir}/hhd-ui
 %{_datadir}/applications/hhd-ui.desktop
+
+%changelog
+* Wed Apr 3 2024 Matthew Schwartz <njtransit215@gmail.com> - 2.2.0-1
+- Initial package creation/var/lib/mock/fedora-39-x86_64/result
