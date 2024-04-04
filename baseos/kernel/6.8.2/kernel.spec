@@ -164,13 +164,13 @@ Summary: The Linux kernel
 %define specrpmversion 6.8.2
 %define specversion 6.8.2
 %define patchversion 6.8
-%define pkgrelease 201
+%define pkgrelease 202
 %define kversion 6
 %define tarfile_release 6.8.2
 # This is needed to do merge window version magic
 %define patchlevel 8
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 201%{?buildid}%{?dist}
+%define specrelease 202%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 6.8.2
 
@@ -1029,19 +1029,30 @@ Patch309: valve-gamescope-framerate-control-fixups.patch
 Patch310: amdgpu-HAINAN-variant-fixup.patch
 
 # ROG Ally shit
-Patch400: rog-ally-audio-fix.patch
 Patch402: ROG-ALLY-NCT6775-PLATFORM.patch
 Patch403: v14.8-0001-HID-asus-fix-more-n-key-report-descriptors-if-.patch
 Patch404: v14.8-0002-HID-asus-make-asus_kbd_init-generic-remove-rog.patch
 Patch405: v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
-Patch406: v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
-Patch407: rog-ally-gyro-fix.patch
+Patch406: 0004-HID-asus-add-ROG-Z13-lightbar.patch
 
 # temporary patches
 Patch501: 0001-Revert-PCI-Add-a-REBAR-size-quirk-for-Sapphire-RX-56.patch
 Patch502: 0001-acpi-proc-idle-skip-dummy-wait.patch
 Patch503: 0001-drm-i915-quirks-disable-async-flipping-on-specific-d.patch
 Patch504: 0002-drm-i915-add-kernel-parameter-to-disable-async-page-.patch
+
+# ASUS-WMI shit
+Patch550: v1-0001-platform-x86-asus-wmi-add-support-for-2024-ROG-Mi.patch
+Patch551: v1-0002-platform-x86-asus-wmi-add-support-for-Vivobook-GP.patch
+Patch552: v1-0003-platform-x86-asus-wmi-add-support-variant-of-TUF-.patch
+Patch553: v1-0004-platform-x86-asus-wmi-support-toggling-POST-sound.patch
+Patch554: v1-0005-platform-x86-asus-wmi-store-a-min-default-for-ppt.patch
+Patch555: v1-0006-platform-x86-asus-wmi-adjust-formatting-of-ppt-na.patch
+Patch556: v1-0007-platform-x86-asus-wmi-ROG-Ally-increase-wait-time.patch
+Patch557: v1-0008-platform-x86-asus-wmi-Add-support-for-MCU-powersa.patch
+Patch558: v1-0009-platform-x86-asus-wmi-cleanup-main-struct-to-avoi.patch
+
+Patch560: 0001-ALSA-hda-realtek-cs35l41-Support-ASUS-ROG-G634JYR.patch
 
 
 # Allow to set custom USB pollrate for specific devices like so:
@@ -1928,13 +1939,26 @@ ApplyOptionalPatch valve-gamescope-framerate-control-fixups.patch
 ApplyOptionalPatch amdgpu-HAINAN-variant-fixup.patch
 
 # ROG Ally shit
-ApplyOptionalPatch rog-ally-audio-fix.patch
 ApplyOptionalPatch ROG-ALLY-NCT6775-PLATFORM.patch
 ApplyOptionalPatch v14.8-0001-HID-asus-fix-more-n-key-report-descriptors-if-.patch
 ApplyOptionalPatch v14.8-0002-HID-asus-make-asus_kbd_init-generic-remove-rog.patch
 ApplyOptionalPatch v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
-ApplyOptionalPatch v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
-##ApplyOptionalPatch rog-ally-gyro-fix.patch
+ApplyOptionalPatch 0004-HID-asus-add-ROG-Z13-lightbar.patch
+
+# ASUS-WMI shit
+
+ApplyOptionalPatch v1-0001-platform-x86-asus-wmi-add-support-for-2024-ROG-Mi.patch
+ApplyOptionalPatch v1-0002-platform-x86-asus-wmi-add-support-for-Vivobook-GP.patch
+ApplyOptionalPatch v1-0003-platform-x86-asus-wmi-add-support-variant-of-TUF-.patch
+ApplyOptionalPatch v1-0004-platform-x86-asus-wmi-support-toggling-POST-sound.patch
+ApplyOptionalPatch v1-0005-platform-x86-asus-wmi-store-a-min-default-for-ppt.patch
+ApplyOptionalPatch v1-0006-platform-x86-asus-wmi-adjust-formatting-of-ppt-na.patch
+ApplyOptionalPatch v1-0007-platform-x86-asus-wmi-ROG-Ally-increase-wait-time.patch
+ApplyOptionalPatch v1-0008-platform-x86-asus-wmi-Add-support-for-MCU-powersa.patch
+ApplyOptionalPatch v1-0009-platform-x86-asus-wmi-cleanup-main-struct-to-avoi.patch
+
+ApplyOptionalPatch 0001-ALSA-hda-realtek-cs35l41-Support-ASUS-ROG-G634JYR.patch
+
 
 # temporary patches
 ApplyOptionalPatch 0001-Revert-PCI-Add-a-REBAR-size-quirk-for-Sapphire-RX-56.patch
