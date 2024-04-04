@@ -56,4 +56,4 @@ install -Dm644 %{_sourcedir}/hhd-ui.desktop %{buildroot}/usr/share/applications/
 
 %changelog
 * Wed Apr 3 2024 Matthew Schwartz <njtransit215@gmail.com> - 2.2.0-1
-- Initial package creation/var/lib/mock/fedora-39-x86_64/result
+- Initial package creation
