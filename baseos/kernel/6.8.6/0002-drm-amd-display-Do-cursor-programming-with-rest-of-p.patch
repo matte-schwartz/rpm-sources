@@ -1,0 +1,300 @@
+From e2552a04d70af2a4036aab3319f89ceee1e7edb6 Mon Sep 17 00:00:00 2001
+From: Harry Wentland <harry.wentland@amd.com>
+Date: Fri, 15 Mar 2024 13:02:00 -0400
+Subject: [PATCH 2/3] drm/amd/display: Do cursor programming with rest of pipe
+
+Signed-off-by: Harry Wentland <harry.wentland@amd.com>
+---
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 136 +++++++++++++++---
+ drivers/gpu/drm/amd/display/dc/core/dc.c      |  84 +++++++++++
+ drivers/gpu/drm/amd/display/dc/dc_stream.h    |   3 +
+ 3 files changed, 206 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index ad5742fa32d8..3a85e2784d2f 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -8318,6 +8318,122 @@ static inline uint32_t get_mem_type(struct drm_framebuffer *fb)
+ 	return abo->tbo.resource ? abo->tbo.resource->mem_type : 0;
+ }
+
++/* TODO remove duplicate */
++static int amdgpu_dm_plane_get_cursor_position(struct drm_plane *plane, struct drm_crtc *crtc,
++					       struct dc_cursor_position *position)
++{
++	struct amdgpu_crtc *amdgpu_crtc = to_amdgpu_crtc(crtc);
++	int x, y;
++	int xorigin = 0, yorigin = 0;
++
++	if (!crtc || !plane->state->fb)
++		return 0;
++
++	if ((plane->state->crtc_w > amdgpu_crtc->max_cursor_width) ||
++	    (plane->state->crtc_h > amdgpu_crtc->max_cursor_height)) {
++		DRM_ERROR("%s: bad cursor width or height %d x %d\n",
++			  __func__,
++			  plane->state->crtc_w,
++			  plane->state->crtc_h);
++		return -EINVAL;
++	}
++
++	x = plane->state->crtc_x;
++	y = plane->state->crtc_y;
++
++	if (x <= -amdgpu_crtc->max_cursor_width ||
++	    y <= -amdgpu_crtc->max_cursor_height)
++		return 0;
++
++	if (x < 0) {
++		xorigin = min(-x, amdgpu_crtc->max_cursor_width - 1);
++		x = 0;
++	}
++	if (y < 0) {
++		yorigin = min(-y, amdgpu_crtc->max_cursor_height - 1);
++		y = 0;
++	}
++	position->enable = true;
++	position->translate_by_source = true;
++	position->x = x;
++	position->y = y;
++	position->x_hotspot = xorigin;
++	position->y_hotspot = yorigin;
++
++	return 0;
++}
++
++static void amdgpu_dm_update_cursor(struct drm_plane *plane,
++				    struct drm_plane_state *old_plane_state,
++				    struct dc_stream_update *update)
++{
++	struct amdgpu_device *adev = drm_to_adev(plane->dev);
++	struct amdgpu_framebuffer *afb = to_amdgpu_framebuffer(plane->state->fb);
++	struct drm_crtc *crtc = afb ? plane->state->crtc : old_plane_state->crtc;
++	struct dm_crtc_state *crtc_state = crtc ? to_dm_crtc_state(crtc->state) : NULL;
++	struct amdgpu_crtc *amdgpu_crtc = to_amdgpu_crtc(crtc);
++	uint64_t address = afb ? afb->address : 0;
++	struct dc_cursor_position position = {0};
++	struct dc_cursor_attributes attributes;
++	int ret;
++
++	if (!plane->state->fb && !old_plane_state->fb)
++		return;
++
++	drm_dbg_atomic(plane->dev, "crtc_id=%d with size %d to %d\n",
++		       amdgpu_crtc->crtc_id, plane->state->crtc_w,
++		       plane->state->crtc_h);
++
++	ret = amdgpu_dm_plane_get_cursor_position(plane, crtc, &position);
++	if (ret)
++		return;
++
++	if (!position.enable) {
++		/* turn off cursor */
++		if (crtc_state && crtc_state->stream) {
++			dc_stream_set_cursor_position(crtc_state->stream,
++						      &position);
++			update->cursor_position = &crtc_state->stream->cursor_position;
++		}
++		return;
++	}
++
++	amdgpu_crtc->cursor_width = plane->state->crtc_w;
++	amdgpu_crtc->cursor_height = plane->state->crtc_h;
++
++	memset(&attributes, 0, sizeof(attributes));
++	attributes.address.high_part = upper_32_bits(address);
++	attributes.address.low_part  = lower_32_bits(address);
++	attributes.width             = plane->state->crtc_w;
++	attributes.height            = plane->state->crtc_h;
++	attributes.color_format      = CURSOR_MODE_COLOR_PRE_MULTIPLIED_ALPHA;
++	attributes.rotation_angle    = 0;
++	attributes.attribute_flags.value = 0;
++
++	/* Enable cursor degamma ROM on DCN3+ for implicit sRGB degamma in DRM
++	 * legacy gamma setup.
++	 */
++	if (crtc_state->cm_is_degamma_srgb &&
++	    adev->dm.dc->caps.color.dpp.gamma_corr)
++		attributes.attribute_flags.bits.ENABLE_CURSOR_DEGAMMA = 1;
++
++	attributes.pitch = afb->base.pitches[0] / afb->base.format->cpp[0];
++
++	if (crtc_state->stream) {
++		if (!dc_stream_set_cursor_attributes(crtc_state->stream,
++						     &attributes))
++			DRM_ERROR("DC failed to set cursor attributes\n");
++
++		update->cursor_attributes = &crtc_state->stream->cursor_attributes;
++
++		if (!dc_stream_set_cursor_position(crtc_state->stream,
++						   &position))
++			DRM_ERROR("DC failed to set cursor position\n");
++
++		update->cursor_position = &crtc_state->stream->cursor_position;
++	}
++}
++
+ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 				    struct drm_device *dev,
+ 				    struct amdgpu_display_manager *dm,
+@@ -8356,14 +8472,6 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		goto cleanup;
+ 	}
+
+-	/*
+-	 * Disable the cursor first if we're disabling all the planes.
+-	 * It'll remain on the screen after the planes are re-enabled
+-	 * if we don't.
+-	 */
+-	if (acrtc_state->active_planes == 0)
+-		amdgpu_dm_commit_cursors(state);
+-
+ 	/* update planes when needed */
+ 	for_each_oldnew_plane_in_state(state, plane, old_plane_state, new_plane_state, i) {
+ 		struct drm_crtc *crtc = new_plane_state->crtc;
+@@ -8377,8 +8485,10 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		/* Cursor plane is handled after stream updates */
+ 		if (plane->type == DRM_PLANE_TYPE_CURSOR) {
+ 			if ((fb && crtc == pcrtc) ||
+-			    (old_plane_state->fb && old_plane_state->crtc == pcrtc))
++			    (old_plane_state->fb && old_plane_state->crtc == pcrtc)) {
+ 				cursor_update = true;
++				amdgpu_dm_update_cursor(plane, old_plane_state, &bundle->stream_update);
++			    }
+
+ 			continue;
+ 		}
+@@ -8723,14 +8833,6 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		mutex_unlock(&dm->dc_lock);
+ 	}
+
+-	/*
+-	 * Update cursor state *after* programming all the planes.
+-	 * This avoids redundant programming in the case where we're going
+-	 * to be disabling a single plane - those pipes are being disabled.
+-	 */
+-	if (acrtc_state->active_planes)
+-		amdgpu_dm_commit_cursors(state);
+-
+ cleanup:
+ 	kfree(bundle);
+ }
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 2c7c3a788ab3..353a94cfad8f 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -3276,6 +3276,83 @@ static bool update_planes_and_stream_state(struct dc *dc,
+
+ }
+
++static void program_cursor_attributes(
++	struct dc *dc,
++	struct dc_stream_state *stream)
++{
++	int i;
++	struct resource_context *res_ctx;
++	struct pipe_ctx *pipe_to_program = NULL;
++
++	if (!stream)
++		return;
++
++	res_ctx = &dc->current_state->res_ctx;
++
++	for (i = 0; i < MAX_PIPES; i++) {
++		struct pipe_ctx *pipe_ctx = &res_ctx->pipe_ctx[i];
++
++		if (pipe_ctx->stream != stream)
++			continue;
++
++		if (!pipe_to_program) {
++			pipe_to_program = pipe_ctx;
++			dc->hwss.cursor_lock(dc, pipe_to_program, true);
++			if (pipe_to_program->next_odm_pipe)
++				dc->hwss.cursor_lock(dc, pipe_to_program->next_odm_pipe, true);
++		}
++
++		dc->hwss.set_cursor_attribute(pipe_ctx);
++		if (dc->ctx->dmub_srv)
++			dc_send_update_cursor_info_to_dmu(pipe_ctx, i);
++		if (dc->hwss.set_cursor_sdr_white_level)
++			dc->hwss.set_cursor_sdr_white_level(pipe_ctx);
++	}
++
++	if (pipe_to_program) {
++		dc->hwss.cursor_lock(dc, pipe_to_program, false);
++		if (pipe_to_program->next_odm_pipe)
++			dc->hwss.cursor_lock(dc, pipe_to_program->next_odm_pipe, false);
++	}
++}
++
++static void program_cursor_position(
++	struct dc *dc,
++	struct dc_stream_state *stream)
++{
++	int i;
++	struct resource_context *res_ctx;
++	struct pipe_ctx *pipe_to_program = NULL;
++
++	if (!stream)
++		return;
++
++	res_ctx = &dc->current_state->res_ctx;
++
++	for (i = 0; i < MAX_PIPES; i++) {
++		struct pipe_ctx *pipe_ctx = &res_ctx->pipe_ctx[i];
++
++		if (pipe_ctx->stream != stream ||
++				(!pipe_ctx->plane_res.mi  && !pipe_ctx->plane_res.hubp) ||
++				!pipe_ctx->plane_state ||
++				(!pipe_ctx->plane_res.xfm && !pipe_ctx->plane_res.dpp) ||
++				(!pipe_ctx->plane_res.ipp && !pipe_ctx->plane_res.dpp))
++			continue;
++
++		if (!pipe_to_program) {
++			pipe_to_program = pipe_ctx;
++			dc->hwss.cursor_lock(dc, pipe_to_program, true);
++		}
++
++		dc->hwss.set_cursor_position(pipe_ctx);
++		if (dc->ctx->dmub_srv)
++			dc_send_update_cursor_info_to_dmu(pipe_ctx, i);
++	}
++
++	if (pipe_to_program)
++		dc->hwss.cursor_lock(dc, pipe_to_program, false);
++}
++
+ static void commit_planes_do_stream_update(struct dc *dc,
+ 		struct dc_stream_state *stream,
+ 		struct dc_stream_update *stream_update,
+@@ -3336,6 +3413,13 @@ static void commit_planes_do_stream_update(struct dc *dc,
+ 				}
+ 			}
+
++			if (stream_update->cursor_attributes) {
++				program_cursor_attributes(dc, stream);
++			}
++
++			if (stream_update->cursor_position) {
++				program_cursor_position(dc, stream);
++			}
+
+ 			/* Full fe update*/
+ 			if (update_type == UPDATE_TYPE_FAST)
+diff --git a/drivers/gpu/drm/amd/display/dc/dc_stream.h b/drivers/gpu/drm/amd/display/dc/dc_stream.h
+index 4f0b066297fb..df86668f560f 100644
+--- a/drivers/gpu/drm/amd/display/dc/dc_stream.h
++++ b/drivers/gpu/drm/amd/display/dc/dc_stream.h
+@@ -327,6 +327,9 @@ struct dc_stream_update {
+
+ 	struct test_pattern *pending_test_pattern;
++
++	struct dc_cursor_attributes *cursor_attributes;
++	struct dc_cursor_position *cursor_position;
+ };
+
+ bool dc_is_stream_unchanged(
+	struct dc_stream_state *old_stream, struct dc_stream_state *stream);
+--
+2.44.0
+
