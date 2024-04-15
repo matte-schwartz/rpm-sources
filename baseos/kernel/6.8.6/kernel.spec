@@ -1028,7 +1028,7 @@ Patch309: valve-gamescope-framerate-control-fixups.patch
 # https://gitlab.freedesktop.org/drm/amd/-/issues/1839
 Patch310: amdgpu-HAINAN-variant-fixup.patch
 
-# ROG Ally shit
+# handheld shit
 Patch402: ROG-ALLY-NCT6775-PLATFORM.patch
 Patch403: v14.8-0001-HID-asus-fix-more-n-key-report-descriptors-if-.patch
 Patch404: v14.8-0002-HID-asus-make-asus_kbd_init-generic-remove-rog.patch
@@ -1036,9 +1036,10 @@ Patch405: v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
 Patch406: v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
 Patch407: rog-ally-gyro-fix.patch
 Patch408: 0001-HID-asus-add-ROG-Z13-lightbar.patch
-
-# Chinese handheld shit
-Patch420: 0001-iio-imu-Add-driver-for-Bosch-BMI260-IMU.patch
+Patch409: 0001-iio-imu-Add-driver-for-Bosch-BMI260-IMU.patch
+Patch410: bmi160_ayaneo.patch
+Patch411: 0001-oxp-sensors-dkms-align.patch
+Patch412: 0002-oxp-sensors-other-devices.patch
 
 # new upstream Asus-WMI patchset
 Patch450: v4-0001-platform-x86-asus-wmi-add-support-for-2024-ROG-Mi.patch
@@ -1934,8 +1935,7 @@ ApplyOptionalPatch asus-linux.patch
 ApplyOptionalPatch lenovo-legion-laptop.patch
 
 # hdr: https://github.com/CachyOS/kernel-patches
-# Disable 0001-amd-hdr.patch for gamescope-git testing
-# ApplyOptionalPatch 0001-amd-hdr.patch
+ApplyOptionalPatch 0001-amd-hdr.patch
 ApplyOptionalPatch 0001-add-acpi_call.patch
 ApplyOptionalPatch uinput.patch
 
@@ -1946,7 +1946,7 @@ ApplyOptionalPatch valve-gamescope-framerate-control-fixups.patch
 # https://gitlab.freedesktop.org/drm/amd/-/issues/1839
 ApplyOptionalPatch amdgpu-HAINAN-variant-fixup.patch
 
-# ROG Ally shit
+# other handheld shit
 ApplyOptionalPatch ROG-ALLY-NCT6775-PLATFORM.patch
 ApplyOptionalPatch v14.8-0001-HID-asus-fix-more-n-key-report-descriptors-if-.patch
 ApplyOptionalPatch v14.8-0002-HID-asus-make-asus_kbd_init-generic-remove-rog.patch
@@ -1954,9 +1954,11 @@ ApplyOptionalPatch v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
 ApplyOptionalPatch 0001-HID-asus-add-ROG-Z13-lightbar.patch
 ApplyOptionalPatch v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
 ApplyOptionalPatch rog-ally-gyro-fix.patch
-
-# Chinese handheld shit
 ApplyOptionalPatch 0001-iio-imu-Add-driver-for-Bosch-BMI260-IMU.patch
+ApplyOptionalPatch bmi160_ayaneo.patch
+ApplyOptionalPatch 0001-oxp-sensors-dkms-align.patch
+ApplyOptionalPatch 0002-oxp-sensors-other-devices.patch
+
 
 # Upstream Asus-Wmi patchset
 ApplyOptionalPatch v4-0001-platform-x86-asus-wmi-add-support-for-2024-ROG-Mi.patch
