@@ -1,6 +1,6 @@
 Name:           jupiter-hw-support
 Version:        0.0.git.20240416.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Steam Deck Hardware Support Package
 License:        MIT
 URL:            https://github.com/nobara-project/steamdeck-edition-packages
@@ -53,7 +53,6 @@ mkdir -p %{buildroot}%{_libexecdir}/hwsupport/
 mkdir -p %{buildroot}%{_sysconfdir}/
 cp -rv usr/share/* %{buildroot}%{_datadir}
 cp -rv usr/lib/systemd/system/* %{buildroot}%{_unitdir}/
-cp usr/lib/hwsupport/power-button-handler.py %{buildroot}%{_libexecdir}/hwsupport/power-button-handler.py
 cp usr/lib/hwsupport/format-device.sh %{buildroot}%{_libexecdir}/hwsupport/format-device
 cp usr/lib/hwsupport/format-sdcard.sh %{buildroot}%{_libexecdir}/hwsupport/format-sdcard
 cp usr/lib/hwsupport/sdcard-rescan.sh %{buildroot}%{_libexecdir}/hwsupport/sdcard-rescan
@@ -121,11 +120,9 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 %{_libexecdir}/hwsupport/trim-devices
 %{_libexecdir}/hwsupport/common-functions
 %{_libexecdir}/hwsupport/block-device-event
-%{_libexecdir}/hwsupport/power-button-handler.py
 %{_prefix}/lib/systemd/system/*
 %{_prefix}/lib/udev/rules.d/*
 %{_datadir}/icons/steam/*
-%{_datadir}/steamos/steamos.png
 %{_datadir}/jupiter_bios/*
 %{_datadir}/jupiter_bios_updater/*
 %{_datadir}/jupiter_controller_fw_updater/*
