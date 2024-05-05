@@ -21,8 +21,10 @@ index 3f34ee8..4a78916 100755
      mount_point=$(make_dbus_udisks_call call 'data[0]' s         \
                                   "block_devices/${DEVBASE}"      \
                                   Filesystem Mount                \
-                                  'a{sv}' 3                       \
+                                  'a{sv}' 4                       \
 -                                 as-user s deck                  \
 +                                 as-user s ${USER}               \
                                   auth.no_user_interaction b true \
+                                  fstype s "$FSTYPE"              \
                                   options s "$OPTS")
+--                                  

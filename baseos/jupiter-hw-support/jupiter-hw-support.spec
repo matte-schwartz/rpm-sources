@@ -1,14 +1,16 @@
 Name:           jupiter-hw-support
-Version:        0.0.git.20240416.1
-Release:        2%{?dist}
+Version:        0.0.git.20240423.1
+Release:        1%{?dist}
 Summary:        Steam Deck Hardware Support Package
 License:        MIT
 URL:            https://github.com/nobara-project/steamdeck-edition-packages
 Source0:        %{URL}/releases/download/1.0/jupiter-hw-support.tar.gz
 Patch0:         fedora.patch
 Patch1:         selinux.patch
-Patch2:         cursor-path.patch
-Patch3:         user.patch
+Patch2:         systemd-run.patch
+Patch3:         priv-write.patch
+Patch4:         user.patch
+Patch5:         cursor-path.patch
 
 Requires:       python3
 Requires:       python3-evdev
