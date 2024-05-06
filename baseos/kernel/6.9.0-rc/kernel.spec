@@ -1952,7 +1952,7 @@ ApplyOptionalPatch v14.8-0002-HID-asus-make-asus_kbd_init-generic-remove-rog.pat
 ApplyOptionalPatch v14.8-0003-HID-asus-add-ROG-Ally-N-Key-ID-and-keycodes.patch
 ApplyOptionalPatch 0001-HID-asus-add-ROG-Z13-lightbar.patch
 ApplyOptionalPatch v14.8-0004-HID-asus-add-ROG-Ally-xpad-settings.patch
-ApplyOptionalPatch rog-ally-gyro-fix.patch
+#ApplyOptionalPatch rog-ally-gyro-fix.patch
 ApplyOptionalPatch 0001-iio-imu-Add-driver-for-Bosch-BMI260-IMU.patch
 ApplyOptionalPatch bmi160_ayaneo.patch
 
@@ -1990,11 +1990,11 @@ ApplyOptionalPatch set-ps4-bt-poll-rate-1000hz.patch
 ApplyOptionalPatch 0001-Set-amdgpu.ppfeaturemask-0xffffffff-as-default.patch
 
 # steam deck oled patchs
-ApplyOptionalPatch steamdeck-oled-wifi.patch
+#ApplyOptionalPatch steamdeck-oled-wifi.patch
 ApplyOptionalPatch steamdeck-oled-audio.patch
 ApplyOptionalPatch steamdeck-oled-hw-quirks.patch
-ApplyOptionalPatch steamdeck-oled-refresh-rate.patch
-ApplyOptionalPatch steamdeck-oled-legion-go-bluetooth-hang.patch
+#ApplyOptionalPatch steamdeck-oled-refresh-rate.patch
+#ApplyOptionalPatch steamdeck-oled-legion-go-bluetooth-hang.patch
 
 
 # t2 macbook patches
