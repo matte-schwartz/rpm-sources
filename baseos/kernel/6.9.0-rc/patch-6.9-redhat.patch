@@ -1,0 +1,16 @@
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 40fb2ca6fe4c..9a0c335f8c63 100644
+--- a/Makefile
++++ b/Makefile
+@@ -22,6 +22,8 @@ $(if $(filter __%, $(MAKECMDGOALS)), \
+ PHONY := __all
+ __all:
+ 
++include Makefile.rhelver
++
+ # We are using a recursive build, so we need to do a little thinking
+ # to get the ordering right.
+ #
