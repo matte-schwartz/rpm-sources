@@ -180,7 +180,7 @@ Summary: The Linux kernel
 #
 %define arkupstreambuild %{nil}
 #
-%define arkbuild 00
+%define arkbuild 01
 %if 0%{?fedora}
 %define distbuildid %{lua: print(rpm.expand("%{arkbuild}") + (rpm.expand("%{fedora}") - 37 ) * 100)}
 %endif
@@ -1924,7 +1924,9 @@ ApplyOptionalPatch graysky-more-uarches.patch
 # tkg
 # https://github.com/Frogging-Family/linux-tkg
 ApplyOptionalPatch tkg-0001-add-sysctl-to-disallow-unprivileged-CLONE_NEWUSER-by.patch
-ApplyOptionalPatch tkg-0002-clear-patches.patch
+# appears deprecated
+# make[4]: *** No rule to make target 'drivers/video/fbdev/intelfb/Makefile'.  
+#ApplyOptionalPatch tkg-0002-clear-patches.patch
 ApplyOptionalPatch tkg-0003-glitched-base.patch
 ApplyOptionalPatch tkg-0003-glitched-eevdf-additions.patch
 ApplyOptionalPatch tkg-0003-glitched-cfs.patch
