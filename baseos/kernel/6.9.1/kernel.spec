@@ -180,7 +180,7 @@ Summary: The Linux kernel
 #
 %define arkupstreambuild %{nil}
 #
-%define arkbuild 01
+%define arkbuild 02
 %if 0%{?fedora}
 %define distbuildid %{lua: print(rpm.expand("%{arkbuild}") + (rpm.expand("%{fedora}") - 37 ) * 100)}
 %endif
@@ -1013,7 +1013,7 @@ Patch204: tkg-0003-glitched-eevdf-additions.patch
 Patch205: tkg-0003-glitched-cfs.patch
 Patch206: tkg-0007-v6.9-fsync1_via_futex_waitv.patch
 #Patch207: tkg-0007-v6.8-ntsync.patch
-Patch208: tkg-0013-optimize_harder_O3.patch
+Patch208: cachy-optimize-harder.patch
 Patch209: tkg-0014-OpenRGB.patch
 
 # CachyOS BORE
@@ -1931,7 +1931,7 @@ ApplyOptionalPatch tkg-0003-glitched-base.patch
 ApplyOptionalPatch tkg-0003-glitched-eevdf-additions.patch
 ApplyOptionalPatch tkg-0003-glitched-cfs.patch
 ApplyOptionalPatch tkg-0007-v6.9-fsync1_via_futex_waitv.patch
-ApplyOptionalPatch tkg-0013-optimize_harder_O3.patch
+ApplyOptionalPatch cachy-optimize-harder.patch
 ApplyOptionalPatch tkg-0014-OpenRGB.patch
 
 # CachyOS BORE
