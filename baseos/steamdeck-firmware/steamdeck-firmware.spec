@@ -1,5 +1,6 @@
 %global _firmwarepath   /usr/lib/firmware
 %define __os_install_post %{nil}
+%global _upstreamtag 1
 
 Summary: Steam Deck OLED firmware for wifi and bluetooth
 Name: steamdeck-firmware
@@ -7,7 +8,7 @@ Version: 20240503.1
 Release: 1%{?dist}
 License: Public Domain
 Group: System Environment/Base
-Source0: https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-firmware-neptune-jupiter.20240503.1-1-any.pkg.tar.zst
+Source0: https://steamdeck-packages.steamos.cloud/archlinux-mirror/jupiter-main/os/x86_64/linux-firmware-neptune-jupiter.%{version}-%{_upstreamtag}-any.pkg.tar.zst
 
 BuildArch: noarch
 BuildRequires: filesystem
