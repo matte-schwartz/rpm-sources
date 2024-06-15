@@ -1,17 +1,7 @@
-From c403e1cd9b89b0d62aa1b87294a2166797df77ed Mon Sep 17 00:00:00 2001
-From: GloriousEggroll <gloriouseggroll@gmail.com>
-Date: Sat, 25 May 2024 01:38:57 -0600
-Subject: [PATCH] Nobara defaults
-
----
- src/options.kcfg      |  18 +++---
- src/options.kcfg.orig | 134 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 143 insertions(+), 9 deletions(-)
-
-diff --git a/src/options.kcfg b/src/options.kcfg
+diff --git a/src/kcm/options.kcfg b/src/kcm/options.kcfg
 index 6354fe3..193f986 100644
---- a/src/options.kcfg
-+++ b/src/options.kcfg
+--- a/src/kcm/options.kcfg
++++ b/src/kcm/options.kcfg
 @@ -41,10 +41,10 @@
              <max>20</max>
          </entry>
@@ -26,8 +16,8 @@ index 6354fe3..193f986 100644
          <entry name="ActiveOutlineAlpha" type="Int">
              <default>255</default>
 @@ -77,12 +77,12 @@
-
-
+ 
+ 
          <entry name="ActiveShadowAlpha" type="Int">
 -            <default>255</default>
 +            <default>70</default>
@@ -59,8 +49,8 @@ index 6354fe3..193f986 100644
 -            <default>false</default>
 +            <default>true</default>
          </entry>
-
-
+ 
+ 
 @@ -131,4 +131,4 @@
              <default>true</default>
          </entry>
@@ -68,6 +58,3 @@ index 6354fe3..193f986 100644
 -</kcfg>
 \ No newline at end of file
 +</kcfg>
---
-2.45.1
-

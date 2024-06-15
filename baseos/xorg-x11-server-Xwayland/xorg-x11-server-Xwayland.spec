@@ -1,15 +1,16 @@
-%global commit 84b6d7e2c50514c40b905e8bf59726436c518cf4
+%global commit 1126d55f80fb681747d27180f480bb207f50e751
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
-%global gitdate 20240307
+%global gitdate 20240527
 %global pkgname %{?gitdate:xserver}%{!?gitdate:xwayland}
 
 %global default_font_path "catalogue:/etc/X11/fontpath.d,built-ins"
 
 Summary:   Xwayland
 Name:      xorg-x11-server-Xwayland
-Version:   23.2.6
-Release:   1%{?gitdate:.%{gitdate}git%{shortcommit}}%{?dist}
+
+Version:   24.1.0
+Release:   2%{?gitdate:.%{gitdate}git%{shortcommit}}%{?dist}
 
 URL:       http://www.x.org
 %if 0%{?gitdate}
@@ -101,7 +102,7 @@ The development package provides the developmental files which are
 necessary for developing Wayland compositors using Xwayland.
 
 %prep
-%autosetup -S git_am -n %{pkgname}-%{?gitdate:%{commit}}%{!?gitdate:%{version}}
+%autosetup -p1 -n %{pkgname}-%{?gitdate:%{commit}}%{!?gitdate:%{version}}
 
 %if ! 0%{?gitdate}
 # We can't autopatch this because we have to add the header first:
@@ -118,6 +119,7 @@ cp %{SOURCE1} hw/xfree86/common/
         -Dserverconfigdir=%{_datadir}/xwayland \
         -Dxcsecurity=true \
         -Dglamor=true \
+        -Dxwayland_ei=auto \
         -Ddri3=true
 
 %meson_build
