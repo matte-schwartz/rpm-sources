@@ -4,7 +4,7 @@
 
 Summary: Steam Deck OLED firmware for wifi and bluetooth
 Name: steamdeck-firmware
-Version: 20240503.1
+Version: 20240605.1
 Release: 1%{?dist}
 License: Public Domain
 Group: System Environment/Base
@@ -24,13 +24,13 @@ tar --strip-components 1 -xvf %{SOURCE0}
 rm -rf %{buildroot}
 
 # Create necessary directories in buildroot
-install -d %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/
-install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/amss.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/amss.bin.zst
-install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/board-2.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/board-2.bin.zst
-install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/board.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/board.bin.zst
-install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/boardg.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/boardg.bin.zst
-install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/m3.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/m3.bin.zst
-install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/regdb.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/regdb.bin.zst
+install -d %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/
+install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/amss.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/amss.bin.zst
+install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/board-2.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/board-2.bin.zst
+install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/board.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/board.bin.zst
+install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/boardg.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/boardg.bin.zst
+install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/m3.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/m3.bin.zst
+install -m 0644 %{_builddir}/lib/firmware/ath11k/QCA206X/hw2.1/regdb.bin.zst %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/regdb.bin.zst
 
 install -d %{buildroot}%{_firmwarepath}/qca/
 install -m 0644 %{_builddir}/lib/firmware/qca/hpbtfw21.tlv.zst %{buildroot}%{_firmwarepath}/qca/hpbtfw21.tlv.zst
@@ -40,7 +40,7 @@ install -m 0644 %{_builddir}/lib/firmware/qca/hpnv21g.309.zst %{buildroot}%{_fir
 install -m 0644 %{_builddir}/lib/firmware/qca/hpnv21g.bin.zst %{buildroot}%{_firmwarepath}/qca/hpnv21g.bin.zst
 
 # Decompress each .zst file and remove the compressed archive
-find %{buildroot}%{_firmwarepath}/ath11k/QCA206X/hw2.1/ -name '*.zst' -exec zstd -d {} --rm \;
+find %{buildroot}%{_firmwarepath}/ath11k/QCA2066/hw2.1/ -name '*.zst' -exec zstd -d {} --rm \;
 find %{buildroot}%{_firmwarepath}/qca/ -name '*.zst' -exec zstd -d {} --rm \;
 
 %files
@@ -49,8 +49,9 @@ find %{buildroot}%{_firmwarepath}/qca/ -name '*.zst' -exec zstd -d {} --rm \;
 
 
 %changelog
+* Fri Jun 14 2024 Matthew Schwartz <njtransit215@gmail.com> - 20240605.1
+- New version 20240605.1
 * Sat May 25 2024 Matthew Schwartz <njtransit215@gmail.com> - 20240503.1
 - New version 20240503.1, switch to upstream Valve package instead of evlaV
 * Thu Nov 25 2021 Thomas Crider <gloriouseggroll@gmail.com> - 1.0.0
 - New version v1.0.0
-
